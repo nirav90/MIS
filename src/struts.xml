@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	<package name="default" extends="struts-default">
+		<interceptors>
+			<interceptor name="authenticateUserInterceptor" class="com.mis.interceptor.LoginInterceptor" />
+		</interceptors>
+		<global-results>
+			<result name="login">${pageContext.request.contextPath}/jsp/index.jsp
+			</result>
+		</global-results>
+		<action method="authentication" name="auth" class="com.mis.action.AuthLogin">
+			<!-- <result name="admin">/jsp/dashboard.jsp</result> -->
+			<result name="admin" type="redirectAction">
+				<param name="actionName">
+					showUserList
+				</param>
+			</result>
+			<result name="relmanager" type="redirectAction">
+				<param name="actionName">
+					showDashboard
+				</param>
+			</result>
+
+			<result name="false" type="redirectAction">
+				<param name="actionName">
+					authFail
+				</param>
+			</result>
+
+
+			<!-- <result name="false">/jsp/index.jsp</result> -->
+		</action>
+
+		<action method="authFail" name="authFail" class="com.mis.action.AuthFail">
+			<result name="success">/jsp/index.jsp</result>
+		</action>
+
+		<action method="showDashboard" name="showDashboard" class="com.mis.action.DashBoard">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/DashBoardDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+
+
+		<action method="showUserList" name="showUserList" class="com.mis.action.AuthLogin">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/userListAdmin.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="reqRelManagerDhasBoard" name="RelManagerDhasBoard"
+			class="com.mis.action.AuthLogin">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/relationManagerDashboard.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="addUser" name="addUser" class="com.mis.action.addUserAction">
+			<!-- <interceptor-ref name="authenticateUserInterceptor"></interceptor-ref> -->
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					showUserList
+				</param>
+			</result>
+		</action>
+
+
+		<action method="getReportingPerson" name="getReportingPerson"
+			class="com.mis.action.addUserAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/reportingPersonResponse.jsp</result>
+			<result name="false">/index.jsp</result>
+		</action>
+		<action method="setTarget" name="setTarget" class="com.mis.action.Target">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/Setting.jsp</result>
+			<result name="false">/index.jsp</result>
+		</action>
+
+
+		<action method="editUser" name="editUser" class="com.mis.action.EditUserAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/editUser.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action name="logOut" class="com.mis.action.Logout">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/index.jsp</result>
+		</action>
+		<action name="insertPolicy" class="com.mis.action.NewPolicyAddAction">
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					RelManagerDhasBoard
+				</param>
+			</result>
+		</action>
+		<action name="insertPolicyReq" class="com.mis.action.NewPolicyAddReqAction">
+			<result name="true">/jsp/NewPolicy.jsp</result>
+		</action>
+		<action name="clientPolicyList" class="com.mis.action.ClientPolicyList">
+			<result name="true">/jsp/relationManagerClientPolicyList.jsp</result>
+		</action>
+		<action method="editUserByID" name="editUserByID"
+			class="com.mis.action.EditUserAction">
+			<!-- <interceptor-ref name="authenticateUserInterceptor"></interceptor-ref> -->
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					showUserList
+				</param>
+			</result>
+		</action>
+		<action method="deleteUserByID" name="deleteUserByID"
+			class="com.mis.action.EditUserAction">
+			<!-- <interceptor-ref name="authenticateUserInterceptor"></interceptor-ref> -->
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					showUserList
+				</param>
+			</result>
+		</action>
+		<action method="viewPolicyDetail" name="viewPolicyDetail"
+			class="com.mis.action.ClientPolicyList">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/viewPolicy.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="viewPolicyDetail" name="editPolicyDetail"
+			class="com.mis.action.ClientPolicyList">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/viewPolicyDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="reportGenerate" name="generateReport"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/Report.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="updatePolicyDetail" name="updatePolicyDetail"
+			class="com.mis.action.NewPolicyAddAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					viewPolicyDetail
+				</param>
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getAllBusiness" name="businessDashBoard"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getRMName" name="settingAction" class="com.mis.action.SettingAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/Setting.jsp</result>
+
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getPremium" name="getCalculation" class="com.mis.action.Calculation">
+			<result name="true">/jsp/ajaxJsp/res.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getTotalPremiumNetOfServiceTax" name="getTotalPremiumNetOfServiceTax"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/res3.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getPremium2" name="getCalculation2" class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/res2.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+
+		<!-- search action start -->
+
+		<action method="searchByDate" name="searchByDate"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByInsuredName" name="searchByInsuredName"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByCustom" name="searchByCustom"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByRelationManager" name="searchByRelationManager"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByPolicyStartDate" name="searchByPolicyStartDate"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByPolicyEndDate" name="searchByPolicyStartDate"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByDate" name="searchByDate"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="searchByInsuranceCompany" name="searchByInsuranceCompany"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/BusinessResponse.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+
+		<!-- search action end -->
+
+
+		<!-- report action start -->
+
+		<!-- report action start -->
+
+		<action method="getAllBusiness" name="reportDashBoard"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/Report.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+		<action method="getReportByDateOfInward" name="generateReportByDateOfInward"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportPolicyStartDate" name="generateReportByPolicyStartDate"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportByPolicyEndDate" name="generateReportByPolicyEndDate"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportByInsuredName" name="generateReportByInsuredName"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportByRelationManager" name="generateReportByrelationManager"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportByInsuranceCompany" name="generateReportByInsuranceCompany"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		<action method="getReportByCustom" name="generateReportByCustom"
+			class="com.mis.action.ReportAction">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/BusinessDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<!-- report action End -->
+
+		<!-- report action End -->
+
+		<action method="getTotalPremiumNetOfServiceTax" name="getTotalPremiumNetOfServiceTax"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/ResponseForTotalPremiumPaid.jsp
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<action method="getTotalPremiumNetOfServiceTax2" name="getTotalPremiumNetOfServiceTax2"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/ResponseForTotalPremiumPaid.jsp
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<action method="getTotalPremiumNetOfServiceTax3" name="getTotalPremiumNetOfServiceTax3"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/ResponseForTotalPremiumPaid2.jsp
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<action method="getTotalPremiumNetOfServiceTax4" name="getTotalPremiumNetOfServiceTax4"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/ResponseForTotalPremiumPaid2.jsp
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<action method="getTotalStampDuty" name="getTotalStampDuty"
+			class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/ResponseForTotalPremiumPaid3.jsp
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+		<action method="getPremium2" name="getCalculation2" class="com.mis.action.Calculation">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/ajaxJsp/res2.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+		<action method="getSuminsuredInnerJsp" name="getSuminsuredInnerJsp"
+			class="com.mis.action.ClientPolicyList">
+		</action>
+
+
+		<!-- buisness status action start -->
+
+		<action method="viewBusinessStatus" name="viewBusinessStatus"
+			class="com.mis.action.BusinessDetail">
+			<interceptor-ref name="authenticateUserInterceptor"></interceptor-ref>
+			<result name="true">/jsp/businessDetailStatus.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+
+		<action method="addBusinessStatus" name="addBusinessStatus"
+			class="com.mis.action.BusinessStatus">
+
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					businessDashBoard
+				</param>
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+		<!-- buisness status action ENd -->
+
+		<!-- Claim action Start -->
+		<action method="addClaimDetail" name="addClaimDetail"
+			class="com.mis.action.ClaimAction">
+
+			<result name="true" type="redirectAction">
+				<param name="actionName">
+					viewclaimAll
+				</param>
+			</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+		
+		<action method="viewclaimAll" name="viewclaimAll"
+			class="com.mis.action.ClaimAction">
+
+			<result name="true">jsp/claimList.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+<action method="viewClaimDetailbyId" name="viewClaimDetailbyId"
+			class="com.mis.action.ClaimAction">
+
+			<result name="true">jsp/claimDetail.jsp</result>
+			<result name="false">jsp/index.jsp</result>
+		</action>
+
+
+
+		<!-- Claim action End -->
+
+
+	</package>
+</struts>
